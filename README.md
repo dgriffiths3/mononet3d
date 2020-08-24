@@ -4,6 +4,8 @@ Relatively simple 3D monocular object detection pipeline written in `tensorflow 
 
 ## Approach
 
+![teaser](teaser.png)
+
 We treat 3D monocular object detection as a regression task to estimate a per object 7-DOF exterior orientation. We define the 7-DOF orientation as X, Y, Z, Height, Width, Depth, Rotation. Rotation is defined as angle around the Y-axis. To ensure a continuous learning space we define the rotation about the Y-axis as a 2 value vector direction i, j. Finally, we have a classication network to predict per-object class.
 
 The first part of the network consists of a VGG encoder which encodes the input image `I` in a latent space vector `z` (i.e. `I -> z`). A small MLP then regresses object X, Y, Z directly from this latent code (`z -> centers`). We treat these as standard unordered point sets and apply a chamfer distance loss function between the ground truth centers and the predicted centers. We optimise the gradients of the VGG encoder and center MLP soley on the gradients from the chamfer loss function.

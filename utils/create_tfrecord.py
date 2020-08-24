@@ -129,7 +129,7 @@ if __name__ == '__main__':
 		'dataset' : 'training',
 		'out_train' : './data/kitti_car_train.tfrecord',
 		'out_val' : './data/kitti_car_val.tfrecord',
-		'n_scenes' : 10,
+		'n_scenes' : -1,
 		'n_points' : 32768,
 		'img_size': (375, 1240),
 		'max_objects' : 22,

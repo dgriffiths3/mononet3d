@@ -1,7 +1,7 @@
 [std]
 
 train_file = './data/kitti_car_train.tfrecord'
-val_file = './data/kitti_car_train.tfrecord'
+val_file = './data/kitti_car_val.tfrecord'
 pretrain = ''
 log_code = 'kitti_car_1'
 val_freq = 10

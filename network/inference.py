@@ -123,7 +123,7 @@ if __name__ == '__main__':
 	WEIGHTS = os.path.join(LOG_DIR, MODEL_DIR, 'weights.ckpt')
 	SCORE_THRESH = 0.5
 	NMS_THRESH = 0.25
-	NMS = False
+	NMS = True
 	VIS = True
 	SCREENSHOT_SAVE_DIR = './data/screenshots'
 
