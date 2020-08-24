@@ -14,7 +14,6 @@ from utils.dataset import load_dataset
 from utils import tf_utils, helpers, eval, losses
 
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-
 tf.random.set_seed(42)
 
 
@@ -75,7 +74,7 @@ def evaluate():
             tf.expand_dims(label_c, 0), tf.expand_dims(label_attr, 0)
         )
 
-        cham_dist, _, _ = losses.chamfer_loss(label['c_3d'], tf.expand_dims(pred_c, 0), supervised=True)
+        cham_dist, _, _ = losses.chamfer_loss(label['c_3d'], tf.expand_dims(pred_c, 0))
         cham_res.append(cham_dist)
 
         res, classes = eval.ap_eval(
@@ -90,9 +89,10 @@ def evaluate():
             ap[c] += res[c_idx][2]
             ap_count[c] += 1
         
-        if step % 10 == 0 and step != 0:
+        if step % 100 == 0 and step != 0:
             print('step: {}, Chamfer: {:.4f} AP: {:}, mAP: {:.2f}'.format(
                 step, np.mean(cham_res), ap/ap_count, np.mean(ap/ap_count)))
+            break
 
     print('-------------')
     print('step: {}, Chamfer: {:.4f} AP: {:}, mAP: {:.2f}'.format(
@@ -103,35 +103,16 @@ def evaluate():
 
 if __name__ == '__main__':
 
-    LOG_DIR = './logs/kitti_car_1_10'
+    LOG_DIR = './logs/kitti_car_1'
     MODEL_DIR = 'model'
-    DATASET = './data/kitti_car_train.tfrecord'
+    DATASET = './data/kitti_car_val.tfrecord'
     WEIGHTS = os.path.join(LOG_DIR, MODEL_DIR, 'weights.ckpt')
     SCORE_THRESH = 0.5
     NMS = True
-    NMS_THRESH = 0.5
-    IOU_THRESH = 0.25
+    NMS_THRESH = 0.25
+    IOU_THRESH = 0.5
 
     cfg = toml.load(os.path.join(LOG_DIR, 'config.toml'))
     cfg['model']['batch_size'] = 1
 
     score = evaluate()
-
-    # nms_grid = np.linspace(0, 1, 11)
-    # score_grid = np.linspace(0, 1, 11)
-
-    # max_score = 0.
-    # max_params = []
-    # for n in nms_grid:
-    #     for s in score_grid:
-    #         NMS_THRESH = n
-    #         SCORE_THRESH = s
-
-    #         score = evaluate()
-    #         if score > max_score:
-    #             max_score = score
-    #             max_params = [n, s]
-    #             print('params: {}, score: {}'.format(max_params, max_score))
-
-    # print('------------')
-    # print('params: {}, score: {}'.format(max_params, max_score))

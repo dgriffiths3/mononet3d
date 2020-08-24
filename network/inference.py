@@ -11,9 +11,9 @@ import pylab as plt
 import pyvista as pv
 import tensorflow as tf
 
-from model import SceneModel
+from model import MonoNet
 from utils import helpers, losses, tf_utils
-from utils.dataset import load_scene_dataset
+from utils.dataset import load_dataset
 
 tf.random.set_seed(123)
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
@@ -54,16 +54,20 @@ def plot_kitti(scan, img, pred_c, pred_attr, pred_clf, label):
 	plot.add_mesh(img[:, :, None, 0], scalars=img.reshape((-1, 3), order='F'), rgb=True)
 	plot.remove_scalar_bar()
 
-	plot.show(screenshot='data/kitti_screenshots/pred_{}.png'.format(int(time.time())))
+	if VIS:
+		plot.show()
+	else:
+		if not os.path.isdir(SCREENSHOT_SAVE_DIR): os.makedirs(SCREENSHOT_SAVE_DIR)
+		plot.show(screenshot=os.path.join(SCREENSHOT_SAVE_DIR, 'pred_{}'.format(int(time.time()))))
 
 
 def inference():
 
-	model = SceneModel(cfg['model'])
+	model = MonoNet(cfg['model'])
 	model.load_weights(WEIGHTS)
 	print('[info] model weights loaded.')
 
-	dataset = load_scene_dataset(DATASET, cfg, False)
+	dataset = load_dataset(DATASET, cfg, False)
 
 	for inputs, label in dataset:
 
@@ -113,14 +117,15 @@ def inference():
 
 if __name__ == '__main__':
 
-	LOG_DIR = './logs/scene/synthetic_small_unsupervised_1'
+	LOG_DIR = './logs/kitti_car_1'
 	MODEL_DIR = 'model'
-	DATASET = './data/tfrecords/synthetic_small_train.tfrecord'
+	DATASET = './data/kitti_car_val.tfrecord'
 	WEIGHTS = os.path.join(LOG_DIR, MODEL_DIR, 'weights.ckpt')
-	SCORE_THRESH = 0.
-	NMS_THRESH = 0.05
+	SCORE_THRESH = 0.5
+	NMS_THRESH = 0.25
 	NMS = False
 	VIS = True
+	SCREENSHOT_SAVE_DIR = './data/screenshots'
 
 	cfg = toml.load(os.path.join(LOG_DIR, 'config.toml'))
 	cfg['model']['batch_size'] = 1

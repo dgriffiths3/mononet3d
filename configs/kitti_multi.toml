@@ -1,30 +1,23 @@
-# Standard kitti config
-
 [std]
 
-train_file = './data/tfrecords/kitti_train.tfrecord'
-val_file = './data/tfrecords/kitti_val.tfrecord'
+train_file = './data/kitti_train.tfrecord'
+val_file = './data/kitti_val.tfrecord'
 pretrain = ''
-lossnet_weights = './logs/loss/loss_1/model/weights.ckpt'
-log_code = 'scene/kitti_1'
+log_code = 'kitti_1'
 val_freq = 10
 max_labels = 22
 
 [model]
 
+epochs = 1000000
 batch_size = 4
-lr = 1e-5
+lr = 1e-4
 n_classes = 9
-loss_size = 2.5
-img_size = [375, 1240, 3]
 n_points = 32768
+img_size = [375, 1240, 3]
 n_pred = 25
-unsupervised = false
-iou_border = 0.5
-patch_size = [256, 256, 3]
 kernel_initializer = 'glorot_uniform'
 bias = true
-supervised_iou = false
+patch_size = [256, 256, 3]
 clf_dist = 2.5
-flip_x = false
 halton = {x=[-40.0, 0.0], y=[-1.5, 5.5], z=[-3.0, 140.0]}

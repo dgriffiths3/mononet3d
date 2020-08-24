@@ -29,7 +29,6 @@ class MonoNet(keras.Model):
 		self.patch_size = cfg['patch_size']
 		self.clf_dist = cfg['clf_dist']
 		self.img_size = cfg['img_size']
-		self.iou_border = cfg['iou_border']
 
 		self.n_classes = cfg['n_classes']
 
@@ -93,11 +92,8 @@ class MonoNet(keras.Model):
 	def update_metrics(self, updates, set):
 
 		metrics = self.train_metrics if set == 'train' else self.val_metrics
+		[m.update_state([x]) for m, x in zip(metrics, updates)]
 		
-		for m, x in zip(metrics, updates):
-			if set =='train': m.reset_states()
-			m.update_state([x])
-
 
 	def forward_pass(self, input, calib, o_img_size):
 

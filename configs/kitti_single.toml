@@ -3,14 +3,14 @@
 train_file = './data/kitti_car_train.tfrecord'
 val_file = './data/kitti_car_train.tfrecord'
 pretrain = ''
-log_code = 'kitti_car_2_10'
+log_code = 'kitti_car_1'
 val_freq = 10
-max_labels = 20
+max_labels = 22
 
 [model]
 
-epochs = 100
-batch_size = 2
+epochs = 1000000
+batch_size = 4
 lr = 1e-4
 n_classes = 2
 n_points = 32768
@@ -20,5 +20,4 @@ kernel_initializer = 'glorot_uniform'
 bias = true
 patch_size = [256, 256, 3]
 clf_dist = 2.5
-iou_border = 0.5
 halton = {x=[-40.0, 0.0], y=[-1.5, 5.5], z=[-3.0, 140.0]}

@@ -35,7 +35,7 @@ def xe_loss(label, pred, dist, idx, thresh=2, n_classes=9):
 	return keras.losses.SparseCategoricalCrossentropy()(clf, pred, sample_weight=weights)
 
 
-def chamfer_loss(label, pred, supervised=True):
+def chamfer_loss(label, pred):
 
 	gt_p_dist, gt_p_idx, p_gt_dist, p_gt_idx = tf_utils.nn_distance(label, pred)
 

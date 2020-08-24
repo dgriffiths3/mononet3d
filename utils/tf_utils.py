@@ -128,8 +128,6 @@ def oaaa_to_aabb(pts):
 	return aabb
 
 
-# TODO: WARNING! Gives seperate values to helpers.kitti_scenenet_to_oabb()
-# helpers.kitti_scenenet_to_oabb() gives validated outputs.
 def scenenet_to_aabb(center, attr):
 
 	extent = attr[:, :, :3]
